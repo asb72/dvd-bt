@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Телефон</string>
+    <string name="device_name">Название устройства</string>
+    <string name="pin">PIN пароль</string>
+    <string name="auto_connect">Автосоединение</string>
+    <string name="auto_answer">Автоответ</string>
+    <string name="alert_dialog_ok">ОК</string>
+    <string name="alert_dialog_cancel">Отмена</string>
+    <string name="remove_calllog">Удалить все записи о вызовах</string>
+    <string name="download_pb_phone">Загрузить телефонную книгу</string>
+    <string name="download_pb_sim">Загрузить телефонную книгу SIM карты</string>
+    <string name="remove_pb_phone">Удалить телефонную книгу</string>
+    <string name="remove_pb_sim">Удалить телефонную книгу SIM карты</string>
+    <string name="remove_pair">Удалить все записи</string>
+    <string name="record">Записи</string>
+    <string name="total">Общий:</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bluetooth</string>
+    <string name="digit_0">0<small>+</small></string>
+    <string name="digit_1">1</string>
+    <string name="digit_2">2</string>
+    <string name="digit_3">3</string>
+    <string name="digit_4">4</string>
+    <string name="digit_5">5</string>
+    <string name="digit_6">6</string>
+    <string name="digit_7">7</string>
+    <string name="digit_8">8</string>
+    <string name="digit_9">9</string>
+    <string name="digit_x0">*</string>
+    <string name="digit_x1">\#</string>
+    <string name="device_name">Device name</string>
+    <string name="pin">PIN password</string>
+    <string name="auto_connect">Auto connect</string>
+    <string name="auto_answer">Auto answer</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="alert_dialog_cancel">Cancel</string>
+    <string name="alert_dialog_obd">OBD</string>
+    <string name="remove_calllog">Delete all call records</string>
+    <string name="download_pb_phone">Download the phone book</string>
+    <string name="download_pb_sim">Download the SIM phone book</string>
+    <string name="remove_pb_phone">Delete the phone book</string>
+    <string name="remove_pb_sim">Delete the SIM phone book</string>
+    <string name="remove_pair">Delete all pair records</string>
+    <string name="record">Records</string>
+    <string name="total">Total:</string>
+    <string name="pair_s">Pair success</string>
+    <string name="pair_f">Pair failed</string>
+    <string name="up_s">Update success</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">藍牙</string>
+    <string name="device_name">設備名稱</string>
+    <string name="pin">PIN碼</string>
+    <string name="auto_connect">自動連接</string>
+    <string name="auto_answer">自動接聽</string>
+    <string name="alert_dialog_ok">確定</string>
+    <string name="alert_dialog_cancel">取消</string>
+    <string name="remove_calllog">刪除全部通話記錄</string>
+    <string name="download_pb_phone">下載手機電話本</string>
+    <string name="download_pb_sim">下載SIM卡電話本</string>
+    <string name="remove_pb_phone">刪除手機電話本</string>
+    <string name="remove_pb_sim">刪除SIM卡電話本</string>
+    <string name="remove_pair">刪除全部配對記錄</string>
+    <string name="record">記錄</string>
+    <string name="total">總計:</string>
+    <string name="pair_s">配對成功</string>
+    <string name="pair_f">配對失敗</string>
+    <string name="up_s">升級成功</string>
+</resources>

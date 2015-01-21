@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:layout_gravity="center_horizontal" android:background="@drawable/calling_bg" android:layout_width="502.0dip" android:layout_height="66.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/calling_voice" android:background="@drawable/calling_b_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/calling_voice" android:scaleType="center" />
+    <ImageView android:id="@id/calling_hung" android:background="@drawable/calling_b_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/calling_hung" android:scaleType="center" />
+    <ImageView android:id="@id/calling_dial" android:background="@drawable/calling_b_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/calling_dial" android:scaleType="center" />
+</LinearLayout>

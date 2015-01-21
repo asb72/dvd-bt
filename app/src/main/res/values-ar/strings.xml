@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">بلوتوث</string>
+    <string name="device_name">اسم الجهاز</string>
+    <string name="pin">كلمة المرور</string>
+    <string name="auto_connect">توصيل آلي</string>
+    <string name="auto_answer">رد آلي</string>
+    <string name="alert_dialog_ok">موافق</string>
+    <string name="alert_dialog_cancel">إلغاء</string>
+    <string name="remove_calllog">مسح جميع التسجيلات</string>
+    <string name="download_pb_phone">تنزيل فهرس الهاتف</string>
+    <string name="download_pb_sim">تنزيل فهرس بطاقة الهاتف</string>
+    <string name="remove_pb_phone">مسح فهرس الهاتف</string>
+    <string name="remove_pb_sim">مسح فهرس بطاقة الهاتف</string>
+    <string name="remove_pair">مسح جميع السجلات المقترنة</string>
+</resources>

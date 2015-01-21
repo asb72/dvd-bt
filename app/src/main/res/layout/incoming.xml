@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="center_horizontal" android:orientation="vertical" android:background="@drawable/incoming_bg" android:layout_width="502.0dip" android:layout_height="120.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="26.0dip" android:textStyle="normal" android:textColor="#ffebebeb" android:gravity="center" android:id="@id/incoming" android:layout_width="fill_parent" android:layout_height="57.0dip" />
+    <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ImageView android:id="@id/answering" android:background="@drawable/incoming_b_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="3.0dip" android:src="@drawable/incoming_call" android:scaleType="center" />
+        <ImageView android:id="@id/reject" android:background="@drawable/incoming_b_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="3.0dip" android:src="@drawable/incoming_hung" android:scaleType="center" />
+    </LinearLayout>
+</LinearLayout>

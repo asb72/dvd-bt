@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_gravity="center_horizontal" android:background="@drawable/t_bg" android:layout_width="726.0dip" android:layout_height="67.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="24.0dip" android:textStyle="normal" android:textColor="#ffebebeb" android:gravity="center_vertical" android:id="@id/name" android:layout_width="346.0dip" android:layout_height="fill_parent" android:layout_marginLeft="15.0dip" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true" />
+    <TextView android:textSize="20.0dip" android:textStyle="normal" android:textColor="#ff969696" android:gravity="center_vertical" android:id="@id/value" android:layout_width="345.0dip" android:layout_height="fill_parent" android:layout_marginRight="20.0dip" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+    <ImageView android:id="@id/more" android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_marginRight="20.0dip" android:src="@drawable/more" android:scaleType="center" android:layout_alignParentRight="true" android:layout_centerVertical="true" />
+</RelativeLayout>
