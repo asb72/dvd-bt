@@ -201,7 +201,8 @@ class ATBluetoothActivityHandler extends Handler {
                             if ((message.arg1 & 16777215) == 0) {
                                 this.atBluetoothActivity.PbContactsArray.clear();
                             }
-                            this.atBluetoothActivity.PbContactsArray.add(new Contact(this.atBluetoothActivity, str, str2, PinyinConv.cn2py(str2)));
+                            this.atBluetoothActivity.AddContact(this.atBluetoothActivity.PbContactsArray,
+                                    new Contact(this.atBluetoothActivity, str, str2, PinyinConv.cn2py(str2)) );
                             this.atBluetoothActivity.trListAdapter.notifyDataSetChanged();
                             if (this.atBluetoothActivity.S == 1) {
                                 this.atBluetoothActivity.mToast
@@ -213,7 +214,8 @@ class ATBluetoothActivityHandler extends Handler {
                             if ((message.arg1 & 16777215) == 0) {
                                 this.atBluetoothActivity.SimPbContactsArray.clear();
                             }
-                            this.atBluetoothActivity.SimPbContactsArray.add(new Contact(this.atBluetoothActivity, str, str2, PinyinConv.cn2py(str2)));
+                            this.atBluetoothActivity.AddContact(this.atBluetoothActivity.SimPbContactsArray,
+                                    new Contact(this.atBluetoothActivity, str, str2, PinyinConv.cn2py(str2)) );
                             this.atBluetoothActivity.trListAdapter.notifyDataSetChanged();
                             if (this.atBluetoothActivity.S == 1) {
                                 this.atBluetoothActivity.mToast

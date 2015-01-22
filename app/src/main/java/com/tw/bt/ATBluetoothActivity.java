@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class ATBluetoothActivity extends Activity {
@@ -602,5 +604,34 @@ public class ATBluetoothActivity extends Activity {
 
     static public ArrayList GetSimPbContactsArray(ATBluetoothActivity v){
         return v.SimPbContactsArray;
+    }
+
+    static Comparator<Contact> comparator = new Comparator<Contact>() {
+        public int compare(Contact u1, Contact u2) {
+            int res;
+            int l1 = u1.getName().length();
+            int l2 = u2.getName().length();
+
+            if( l1 == 0 && l2 == 0 )
+                res = u1.getNumber().compareTo(u2.getNumber());
+            else
+                res = u1.getName().compareTo(u2.getName());
+
+            if( l2 == 0 )
+                res = -1;
+			/*
+			else {
+				char ch = u2.getName().charAt(0);
+				if( ch == '+' || Character.isDigit(ch) )
+					res = -1;
+			}*/
+
+            return res;
+        }
+    };
+
+    public void AddContact(ArrayList<Contact> list, Contact contact) {
+        int index = Collections.binarySearch(list, contact, comparator);
+        list.add((index < 0) ? -index - 1 : index, contact);
     }
 }

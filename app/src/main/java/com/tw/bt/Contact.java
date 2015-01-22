@@ -13,4 +13,16 @@ class Contact {
         this.name = str2;
         this.nameConverted = str3;
     }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public String getNameConverted() {
+        return nameConverted;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
