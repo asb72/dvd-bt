@@ -52,7 +52,6 @@ class SearchContactsInBackgroundTask extends AsyncTask {
 
     protected void a(ArrayList arrayList) {
         if (arrayList != null) {
-
             switch (ATBluetoothActivity.GetActivePb(this.atBluetoothActivity)) {
                 case 0:
                     if (ATBluetoothActivity.GetPbSearchResult(this.atBluetoothActivity) != null) {
@@ -69,7 +68,6 @@ class SearchContactsInBackgroundTask extends AsyncTask {
             }
 
             ATBluetoothActivity.GetTrListAdapter(this.atBluetoothActivity).notifyDataSetChanged();
-
         }
     }
 

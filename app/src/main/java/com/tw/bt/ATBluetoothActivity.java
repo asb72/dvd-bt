@@ -3,14 +3,20 @@ package com.tw.bt;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
@@ -76,6 +82,9 @@ public class ATBluetoothActivity extends Activity {
     public ImageView tl_3_Img;
     public TextToSpeech tts = null;
     private static final int TTS_CHECK_CODE = 98549573;
+    private Intent recognizer = null;
+    private static final int RECOGNIZER_SEARCH_START_CODE = 1;
+    public String last_search_str;
 
     static {
         BtnActionNames = new int[]{R.string.device_name, R.string.pin, R.string.auto_connect, R.string.auto_answer};
@@ -314,11 +323,30 @@ public class ATBluetoothActivity extends Activity {
         this.tList.setAdapter(this.tListAdapter);
         this.twUtil = twUtil.e();
         this.NotBC6 = this.twUtil.write(63488);
+        this.last_search_str = "";
 
         //TTS
         Intent checkTtsIntent = new Intent();
         checkTtsIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTtsIntent, TTS_CHECK_CODE);
+
+        recognizer = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizer.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+
+        trEdit.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_voice_normal), null);
+        trEdit.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getX() >= (trEdit.getRight() - trEdit.getCompoundDrawables()[2].getBounds().width() - trEdit.getPaddingRight())) {
+                        VoiceSearch();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         activateTab(R.id.dial);
     }
@@ -378,37 +406,6 @@ public class ATBluetoothActivity extends Activity {
             this.twUtil.sendHandler("ATBluetoothService", 65281);
         }
         super.onResume();
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TTS_CHECK_CODE) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            int result = tts.setLanguage(getApplicationContext().getResources().getConfiguration().locale);
-                            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                tts.shutdown();
-                                mToast.setText(R.string.tts_language_init_error);
-                                mToast.show();
-                            }else{
-                                tts.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                                Speak("test", "TTS test");
-                            }
-                        } else {
-                            tts = null;
-                            mToast.setText(R.string.tts_init_failed);
-                            mToast.show();
-                        }
-                    }
-                });
-            } else {
-                tts = null;
-                mToast.setText(R.string.tts_init_failed);
-                mToast.show();
-            }
-        }
     }
 
     public void onTlClick(View view) {
@@ -681,22 +678,106 @@ public class ATBluetoothActivity extends Activity {
         list.add((index < 0) ? -index - 1 : index, contact);
     }
 
-    public void Speak(String utteranceId, String msg) {
+    public boolean Speak(String utteranceId, String msg) {
         if(tts == null)
-            return;
+            return false;
+
+        mToast.setText(msg);
+        mToast.show();
 
         HashMap<String, String> tts_params = new HashMap<String, String>();
         tts_params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
 
         tts.speak(msg, TextToSpeech.QUEUE_FLUSH, tts_params);
+        return true;
+    }
+
+    public void VoiceSearch() {
+        if(isConnected())
+            Speak("search_start", "Назовите контакт для поиска");
+    }
+
+    public boolean isConnected()
+    {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = cm.getActiveNetworkInfo();
+
+        if(net != null && net.isAvailable() && net.isConnected()) {
+            return true;
+        } else {
+            Speak("internet", this.getText(R.string.please_enable_internet).toString());
+            mToast.setText(R.string.please_enable_internet);
+            mToast.show();
+            return false;
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TTS_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status == TextToSpeech.SUCCESS) {
+                            int result = tts.setLanguage(getApplicationContext().getResources().getConfiguration().locale);
+                            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                tts.shutdown();
+                                mToast.setText(R.string.tts_language_init_error);
+                                mToast.show();
+                            }else{
+                                tts.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                            }
+                        } else {
+                            tts = null;
+                            mToast.setText(R.string.tts_init_failed);
+                            mToast.show();
+                        }
+                    }
+                });
+            } else {
+                tts = null;
+                mToast.setText(R.string.tts_init_failed);
+                mToast.show();
+            }
+        }else if(requestCode == RECOGNIZER_SEARCH_START_CODE) {
+            if(resultCode == RESULT_OK) {
+                ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if(matches.size() > 0) {
+                    trEdit.setText(matches.get(0));
+                    Speak("contacts_search_begin", getString(R.string.tts_search_begin) + matches.get(0));
+                } else {
+                    Speak("nothing_recognized", "Не распознал");
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public class ttsUtteranceListener extends UtteranceProgressListener {
         @Override
         public void onDone(String utteranceId) {
-            if(utteranceId.equals("test")) {
-                mToast.setText("TTS test message speak done.");
-                mToast.show();
+            Log.i("VOICECONTROL", utteranceId);
+            if( utteranceId.equals("search_start") ) {
+                recognizer.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.recognizer_extra_contacts_search));
+                startActivityForResult(recognizer, RECOGNIZER_SEARCH_START_CODE);
+            } else if( utteranceId.equals("contacts_search_begin") ) {
+                // TODO eliminate race condition better
+                while(searchContactsInBackgroundTask != null && searchContactsInBackgroundTask.getStatus() != Status.FINISHED)
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                int size = (isSimPhonebookActive == 1) ? simPbSearchResult.size() :  pbSearchResult.size();
+                Log.i("VOICECONTROL", "Found " + Integer.toString( size));
+/*
+                for(int i = 0; i < size; i++) {
+
+                }
+                recognizer.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.recognizer_select_contact_for_calling));
+                startActivityForResult(recognizer, RECOGNIZER_SEARCH_START_CODE);
+                */
             }
         }
 

@@ -18,6 +18,11 @@ class EditTextWatcher implements TextWatcher {
     }
 
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        if(this.atBluetoothActivity.last_search_str.equals(charSequence.toString()))
+            return;
+        else
+            this.atBluetoothActivity.last_search_str = charSequence.toString();
+
         if (!(this.atBluetoothActivity.searchContactsInBackgroundTask == null || this.atBluetoothActivity.searchContactsInBackgroundTask.getStatus() == Status.FINISHED)) {
             this.atBluetoothActivity.searchContactsInBackgroundTask.cancel(true);
         }

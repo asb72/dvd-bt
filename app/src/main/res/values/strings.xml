@@ -31,4 +31,10 @@
     <string name="pair_s">Pair success</string>
     <string name="pair_f">Pair failed</string>
     <string name="up_s">Update success</string>
+    <string name="tts_init_failed">TTS engine initialisation failed</string>
+    <string name="tts_language_init_error">TTS language initialisation error</string>
+    <string name="please_enable_internet">Voice recognizer disabled, please connect to Internet</string>
+    <string name="recognizer_extra_contacts_search">Contacts search</string>
+    <string name="recognizer_select_contact_for_calling">Say sequence number of contact in the list</string>
+    <string name="tts_search_begin">"Searching: "</string>
 </resources>
