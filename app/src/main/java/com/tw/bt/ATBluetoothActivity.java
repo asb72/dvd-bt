@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 
 public class ATBluetoothActivity extends Activity {
@@ -71,6 +74,8 @@ public class ATBluetoothActivity extends Activity {
     public ImageView tl_1_Img;
     public ImageView tl_2_Img;
     public ImageView tl_3_Img;
+    public TextToSpeech tts = null;
+    private static final int TTS_CHECK_CODE = 98549573;
 
     static {
         BtnActionNames = new int[]{R.string.device_name, R.string.pin, R.string.auto_connect, R.string.auto_answer};
@@ -309,6 +314,12 @@ public class ATBluetoothActivity extends Activity {
         this.tList.setAdapter(this.tListAdapter);
         this.twUtil = twUtil.e();
         this.NotBC6 = this.twUtil.write(63488);
+
+        //TTS
+        Intent checkTtsIntent = new Intent();
+        checkTtsIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkTtsIntent, TTS_CHECK_CODE);
+
         activateTab(R.id.dial);
     }
 
@@ -329,6 +340,10 @@ public class ATBluetoothActivity extends Activity {
         this.twUtil.removeHandler("ATBluetoothActivity");
         this.twUtil.close();
         this.twUtil = null;
+
+        if(tts != null)
+            tts.shutdown();
+
         super.onDestroy();
     }
 
@@ -363,6 +378,37 @@ public class ATBluetoothActivity extends Activity {
             this.twUtil.sendHandler("ATBluetoothService", 65281);
         }
         super.onResume();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TTS_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status == TextToSpeech.SUCCESS) {
+                            int result = tts.setLanguage(getApplicationContext().getResources().getConfiguration().locale);
+                            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                tts.shutdown();
+                                mToast.setText(R.string.tts_language_init_error);
+                                mToast.show();
+                            }else{
+                                tts.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                                Speak("test", "TTS test");
+                            }
+                        } else {
+                            tts = null;
+                            mToast.setText(R.string.tts_init_failed);
+                            mToast.show();
+                        }
+                    }
+                });
+            } else {
+                tts = null;
+                mToast.setText(R.string.tts_init_failed);
+                mToast.show();
+            }
+        }
     }
 
     public void onTlClick(View view) {
@@ -633,5 +679,33 @@ public class ATBluetoothActivity extends Activity {
     public void AddContact(ArrayList<Contact> list, Contact contact) {
         int index = Collections.binarySearch(list, contact, comparator);
         list.add((index < 0) ? -index - 1 : index, contact);
+    }
+
+    public void Speak(String utteranceId, String msg) {
+        if(tts == null)
+            return;
+
+        HashMap<String, String> tts_params = new HashMap<String, String>();
+        tts_params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+
+        tts.speak(msg, TextToSpeech.QUEUE_FLUSH, tts_params);
+    }
+
+    public class ttsUtteranceListener extends UtteranceProgressListener {
+        @Override
+        public void onDone(String utteranceId) {
+            if(utteranceId.equals("test")) {
+                mToast.setText("TTS test message speak done.");
+                mToast.show();
+            }
+        }
+
+        @Override
+        public void onError(String utteranceId) {
+        }
+
+        @Override
+        public void onStart(String utteranceId) {
+        }
     }
 }
